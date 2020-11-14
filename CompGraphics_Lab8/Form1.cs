@@ -14,6 +14,8 @@ namespace CompGraphics_Lab8
         private void Form1_Load(object sender, EventArgs e)
         {
             this.BackgroundImage = Image.FromFile("D:\\fieldSprite.jpg");
+            // Hello
+            // Helllooooooooooooooooooooo
         }
 
         public Form1()
