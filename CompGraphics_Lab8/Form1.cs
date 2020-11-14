@@ -16,6 +16,7 @@ namespace CompGraphics_Lab8
             this.BackgroundImage = Image.FromFile("D:\\fieldSprite.jpg");
             // Hello
             // Helllooooooooooooooooooooo
+            Console.WriteLine("Hello!");
         }
 
         public Form1()
