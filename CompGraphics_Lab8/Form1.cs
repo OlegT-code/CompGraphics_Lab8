@@ -30,6 +30,7 @@ namespace CompGraphics_Lab8
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            Label1.Text = lives + "/5 жизней осталось.";
             pbBackground.Image = Image.FromFile("D:\\fieldSprite.jpg");
 
             tank.Image = Image.FromFile("D:\\tankFront.png");
@@ -38,7 +39,7 @@ namespace CompGraphics_Lab8
             tank.BackColor = Color.Transparent;
             tank.Location = new Point(x1, y1);
             tank.Size = new Size(tank.Image.Width, tank.Image.Height);
-            tank.Name = "Tank";
+            tank.Tag = "Tank";
             pbBackground.Controls.Add(tank);
             tank.BringToFront();
 
@@ -66,7 +67,7 @@ namespace CompGraphics_Lab8
                 GroundObjects[count].BackColor = Color.Transparent;
                 GroundObjects[count].Location = new Point(x * 50, y * 50);
                 GroundObjects[count].Size = new Size(GroundObjects[count].Image.Width, GroundObjects[count].Image.Height);
-                GroundObjects[count].Name = "Enemy";
+                GroundObjects[count].Tag = "Enemy";
                 pbBackground.Controls.Add(GroundObjects[count]);
                 GroundObjects[count].BringToFront();
 
@@ -90,10 +91,24 @@ namespace CompGraphics_Lab8
 
         private void pbBackground_Paint(object sender, PaintEventArgs e)
         {
-            if (tank.Location.Y <= -10)
+            if (tank.Location.Y <= -10) ShowEndDialog("Вы дошли до финала и у вас осталось " + lives + " жизней!");
+            else if (lives == 0) ShowEndDialog("Вы потеряли все жизни и проиграли!");
+
+            /*Rectangle rectTank = new Rectangle(tank.Location.X, tank.Location.Y, tank.Width - 10, tank.Height - 10);
+            rectTank.Location = tank.Location;
+            for (int i = 0; i < GroundObjects.Length; i++)
             {
-                ShowEndDialog("Вы дошли до финала и у вас осталось " + lives +" жизней!");
-            }
+                Rectangle rectEnemy = GroundObjects[i].DisplayRectangle;
+                rectEnemy.Location = GroundObjects[i].Location;
+
+                if (rectTank.IntersectsWith(rectEnemy))
+                {
+                    lives--;
+                    Label1.Text = lives + "/5 жизней осталось.";
+                    GroundObjects[i].Invalidate();
+                    GroundObjects[i].Dispose();
+                }
+            }*/
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)

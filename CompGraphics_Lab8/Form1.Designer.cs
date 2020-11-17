@@ -32,7 +32,6 @@ namespace CompGraphics_Lab8
             this.pbBackground = new System.Windows.Forms.PictureBox();
             this.btnPause = new System.Windows.Forms.Button();
             this.Label1 = new System.Windows.Forms.Label();
-            this.Label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbBackground)).BeginInit();
             this.SuspendLayout();
             // 
@@ -58,25 +57,17 @@ namespace CompGraphics_Lab8
             // Label1
             // 
             this.Label1.AutoSize = true;
-            this.Label1.Location = new System.Drawing.Point(200, 10);
+            this.Label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.Label1.Location = new System.Drawing.Point(400, 10);
             this.Label1.Name = "Label1";
-            this.Label1.Size = new System.Drawing.Size(0, 17);
+            this.Label1.Size = new System.Drawing.Size(0, 25);
             this.Label1.TabIndex = 2;
-            // 
-            // Label2
-            // 
-            this.Label2.AutoSize = true;
-            this.Label2.Location = new System.Drawing.Point(800, 10);
-            this.Label2.Name = "Label2";
-            this.Label2.Size = new System.Drawing.Size(0, 17);
-            this.Label2.TabIndex = 3;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(982, 753);
-            this.Controls.Add(this.Label2);
             this.Controls.Add(this.Label1);
             this.Controls.Add(this.btnPause);
             this.Controls.Add(this.pbBackground);
@@ -99,7 +90,6 @@ namespace CompGraphics_Lab8
         private System.Windows.Forms.PictureBox pbBackground;
         private System.Windows.Forms.Button btnPause;
         private System.Windows.Forms.Label Label1;
-        private System.Windows.Forms.Label Label2;
     }
 }
 
