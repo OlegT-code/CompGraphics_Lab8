@@ -5,7 +5,6 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace CompGraphics_Lab8
@@ -13,8 +12,12 @@ namespace CompGraphics_Lab8
     public partial class Form1 : Form
     {
         PictureBox tank = new PictureBox();
+        PictureBox shadow = new PictureBox();
+        const int maxCountGroundObjects = 60;
         PictureBox[] GroundObjects = new PictureBox[maxCountGroundObjects];
-        const int maxCountGroundObjects = 65;
+        const int maxProjectiles = 30;
+        PictureBox[] Projectiles = new PictureBox[maxProjectiles];
+        int countReleaseProj = 0;
         int[,] matrix;
         int xCountMatrix, yCountMatrix;
 
@@ -23,6 +26,7 @@ namespace CompGraphics_Lab8
         bool isPlaying = true;
         int lives = 5;
         Random rand = new Random();
+        Timer timer1;
 
         public Form1() {
             InitializeComponent();         
@@ -41,7 +45,6 @@ namespace CompGraphics_Lab8
             tank.Size = new Size(tank.Image.Width, tank.Image.Height);
             tank.Tag = "Tank";
             pbBackground.Controls.Add(tank);
-            tank.BringToFront();
 
             xCountMatrix = (pbBackground.Width + 50) / 50;
             yCountMatrix = (pbBackground.Height - tank.Height + 50) / 50;
@@ -67,11 +70,45 @@ namespace CompGraphics_Lab8
                 GroundObjects[count].BackColor = Color.Transparent;
                 GroundObjects[count].Location = new Point(x * 50, y * 50);
                 GroundObjects[count].Size = new Size(GroundObjects[count].Image.Width, GroundObjects[count].Image.Height);
-                GroundObjects[count].Tag = "Enemy";
                 pbBackground.Controls.Add(GroundObjects[count]);
-                GroundObjects[count].BringToFront();
 
                 count++;
+            }
+
+            count = 0;
+
+            for (int i = 0; i < maxProjectiles; i++)
+            {
+                Projectiles[count] = new PictureBox();
+                Projectiles[count].Image = Image.FromFile("D:\\Projectile.png");
+
+                ret:
+                int x = rand.Next(0, xCountMatrix);
+                int y = rand.Next(0, yCountMatrix - 1);
+                if (matrix[x, y] == 1) goto ret;
+
+                matrix[x, y] = 1;
+
+                Projectiles[count].BackColor = Color.Transparent;
+                Projectiles[count].Location = new Point(x * 50, y * 50);
+                Projectiles[count].Size = new Size(Projectiles[count].Image.Width, Projectiles[count].Image.Height);
+                Projectiles[count].Enabled = false;
+
+                count++;
+            }
+
+            timer1 = new Timer();
+            timer1.Enabled = true;
+            timer1.Interval = 2500;
+            timer1.Tick += new EventHandler(timer1_Tick);
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (countReleaseProj < maxProjectiles)
+            {
+                pbBackground.Controls.Add(Projectiles[countReleaseProj]);
+                Projectiles[countReleaseProj++].Enabled = true;
             }
         }
 
@@ -81,34 +118,54 @@ namespace CompGraphics_Lab8
             {
                 btnPause.Text = "Начать игру";
                 isPlaying = false;
+                timer1.Enabled = false;
             }
             else
             {
                 btnPause.Text = "Остановить игру";
                 isPlaying = true;
+                timer1.Enabled = true;
             }
         }
 
         private void pbBackground_Paint(object sender, PaintEventArgs e)
         {
-            if (tank.Location.Y <= -10) ShowEndDialog("Вы дошли до финала и у вас осталось " + lives + " жизней!");
+            if (tank.Location.Y <= -10)
+            {
+                timer1.Enabled = false;
+                ShowEndDialog("Вы дошли до финала и у вас осталось " + lives + " жизней!");
+            }
             else if (lives == 0) ShowEndDialog("Вы потеряли все жизни и проиграли!");
 
-            /*Rectangle rectTank = new Rectangle(tank.Location.X, tank.Location.Y, tank.Width - 10, tank.Height - 10);
+            Rectangle rectTank = new Rectangle(tank.Location.X, tank.Location.Y, tank.Width - 10, tank.Height - 10);
             rectTank.Location = tank.Location;
             for (int i = 0; i < GroundObjects.Length; i++)
             {
                 Rectangle rectEnemy = GroundObjects[i].DisplayRectangle;
                 rectEnemy.Location = GroundObjects[i].Location;
 
-                if (rectTank.IntersectsWith(rectEnemy))
+                if (rectTank.IntersectsWith(rectEnemy) && !GroundObjects[i].IsDisposed)
                 {
                     lives--;
                     Label1.Text = lives + "/5 жизней осталось.";
                     GroundObjects[i].Invalidate();
                     GroundObjects[i].Dispose();
                 }
-            }*/
+            }
+            for (int i = 0; i < Projectiles.Length; i++)
+            {
+                Rectangle rectProj = Projectiles[i].DisplayRectangle;
+                rectProj.Location = Projectiles[i].Location;
+
+                if (rectTank.IntersectsWith(rectProj) && !Projectiles[i].IsDisposed && Projectiles[i].Enabled)
+                {
+                    lives--;
+                    Label1.Text = lives + "/5 жизней осталось.";
+                    Projectiles[i].Invalidate();
+                    Projectiles[i].Dispose();
+                }
+            }
+
         }
 
         private void Form1_KeyDown(object sender, KeyEventArgs e)
