@@ -11,8 +11,8 @@ namespace CompGraphics_Lab8
 {
     public partial class Form1 : Form
     {
-        PictureBox tank = new PictureBox();
-        PictureBox shadow = new PictureBox();
+        PictureBox tank = new PictureBox(); 
+        PictureBox shadow = new PictureBox(); 
         const int maxCountGroundObjects = 60;
         PictureBox[] GroundObjects = new PictureBox[maxCountGroundObjects];
         const int maxProjectiles = 30;
